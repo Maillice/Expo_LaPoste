@@ -4,7 +4,7 @@ import Footer from './components/Footer/Footer'
 import { useLang } from './hooks/useLang'
 import AppRoutes from './routes/AppRoutes'
 // Pages immersives : sans navbar/footer
-const immersive = ['/langue', '/exposition', '/viewer-3d']
+const immersive = ['/langue', '/viewer-3d']
 export default function App() {
   const { pathname } = useLocation()
   const { lang } = useLang()

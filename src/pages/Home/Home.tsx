@@ -1,33 +1,30 @@
-import { useT } from '../../hooks/useLang'
-import { Link } from 'react-router-dom'
-import { CalendarRange, Languages, Layers, Monitor } from 'lucide-react'
 import Hero from '../../components/Hero/Hero'
 import PieceImage from '../../components/PieceCard/PieceImage'
-import { mockCollections } from '../../data/mockCollections'
-const stats = [[CalendarRange, '1914 – 2025', 'home.s1'], [Layers, '~ 2 000', 'home.s2'], [Languages, 'home.s3', 'FR · MO · EN'], [Monitor, 'home.s4', 'home.s4l']] as const
+import { useT } from '../../hooks/useLang'
+const cards = [['home.c1t', 'home.c1d', 'stamp:Histoire'], ['home.c2t', 'home.c2d', 'stamp:Culture'], ['home.c3t', 'home.c3d', 'stamp:Innovation']]
 export default function Home() {
   const t = useT()
   return (
     <>
       <Hero />
-      <section className="relative z-10 mx-auto -mt-12 max-w-5xl px-5">
-        <div className="rounded-lg bg-white p-6 shadow-lg">
-          <h2 className="font-display text-2xl">{t('home.heritage')}</h2>
-          <dl className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-4">
-            {stats.map(([Icon, v, l]) => <div key={v} className="flex items-center gap-3"><Icon className="shrink-0 text-or" aria-hidden /><div><dt className="font-semibold">{t(v)}</dt><dd className="text-xs text-encre/70">{t(l)}</dd></div></div>)}
-          </dl>
+      <section id="about" className="bg-white px-[5vw] py-[90px]">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-[.82rem] font-extrabold uppercase tracking-[.14em] text-[#0873b7]">{t('home.concept')}</p>
+              <h2 className="mt-2 text-[clamp(2rem,4vw,3.3rem)] font-bold leading-tight">{t('home.conceptTitle')}</h2>
+            </div>
+            <p className="max-w-[700px] leading-[1.7] text-[#4f6578]">{t('home.conceptLead')}</p>
+          </div>
+          <ul className="grid gap-5 md:grid-cols-3">
+            {cards.map(([ti, de, img]) => (
+              <li key={ti} className="overflow-hidden rounded-[20px] border border-[#dce7ef] bg-white shadow-[0_12px_30px_rgba(20,58,80,.08)]">
+                <PieceImage bare src={img} alt="" className="w-full" />
+                <div className="p-[18px]"><h3 className="mb-1.5 font-bold">{t(ti)}</h3><p className="leading-normal text-[#4f6578]">{t(de)}</p></div>
+              </li>
+            ))}
+          </ul>
         </div>
-      </section>
-      <section className="mx-auto max-w-7xl px-5 pb-20 pt-14">
-        <h2 className="font-display text-2xl">{t('home.main')}</h2>
-        <ul className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
-          {mockCollections.slice(0, 4).map((c) => (
-            <li key={c.id}><Link to={`/collections/${c.id}`} className="group block">
-              <PieceImage src={c.couverture} alt="" className="transition-transform group-hover:scale-[1.02]" />
-              <p className="mt-3 font-semibold">{c.nom}</p>
-            </Link></li>
-          ))}
-        </ul>
       </section>
     </>
   )

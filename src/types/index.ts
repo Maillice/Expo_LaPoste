@@ -5,5 +5,5 @@ export interface Piece {
   modele3D?: string; audio?: string; video?: string; collection: string; collectionNom?: string; motsCles: string[]
 }
 export interface Collection { id: string; nom: string; periode: string; description: string; nbPieces: number; couverture: string }
-export interface Langue { code: Lang; nom: string; drapeau: string; sousTitre: string }
+export interface Langue { code: Lang; libelle: string; nom: string; drapeau: string; sousTitre: string }
 export interface Media { id: string; type: 'video' | 'audio'; titre: string; src: string; dureeSec: number }

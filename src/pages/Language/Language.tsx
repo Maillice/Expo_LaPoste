@@ -1,26 +1,22 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
 import { mockLangues } from '../../data/mockCollections'
 import { useLang, useT } from '../../hooks/useLang'
-import Logo from '../../components/Navbar/Logo'
 export default function Language() {
   const nav = useNavigate()
-  const { setLang } = useLang()
   const t = useT()
+  const { setLang } = useLang()
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[radial-gradient(ellipse_at_50%_0%,#2c3f66,#0F1B33_70%)] px-5 py-8 text-white">
-      <Logo />
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <h1 className="rise text-center font-display text-4xl md:text-5xl">{t('lang.title')}</h1>
-        <p className="mt-3 text-center text-white/70">{t('lang.subtitle')}</p>
-        <div className="mt-12 grid w-full max-w-3xl gap-5 md:grid-cols-3">
+    <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(145deg,#0b78b8,#0b4f83)] px-[5vw] py-7 text-white">
+      <div className="w-full max-w-[920px] rounded-[28px] border border-white/30 bg-white/10 p-6 shadow-[0_30px_80px_rgba(0,0,0,.22)] backdrop-blur-md md:p-11">
+        <button onClick={() => nav('/')} className="mb-8 rounded-full border border-white/35 bg-white/10 px-4 py-2.5 hover:bg-white/20 md:mb-10">← {t('viewer.back')}</button>
+        <p className="text-[.85rem] font-black tracking-[.16em] text-or">LA POSTE BURKINA FASO</p>
+        <h1 className="rise my-3 text-[clamp(2.5rem,6vw,5rem)] font-bold leading-none tracking-[-.045em]">{t('lang.title')}</h1>
+        <p className="max-w-[800px] text-[clamp(1rem,2vw,1.25rem)] leading-relaxed text-white/85">{t('lang.subtitle')}</p>
+        <div className="mt-8 grid gap-4">
           {mockLangues.map((l) => (
             <button key={l.code} onClick={() => { setLang(l.code); nav('/exposition') }}
-              className="group flex flex-col items-center gap-3 rounded-xl bg-white/90 p-7 text-center text-nuit shadow-lg transition hover:-translate-y-1 hover:bg-white">
-              <span aria-hidden className="grid h-20 w-20 place-items-center rounded-full bg-papier text-5xl shadow-inner">{l.drapeau}</span>
-              <span className="font-display text-2xl">{l.nom}</span>
-              <span className="text-xs text-encre/70">{l.sousTitre}</span>
-              <span className="mt-2 grid h-9 w-9 place-items-center rounded-full bg-nuit/10 transition group-hover:bg-or"><ArrowRight size={16} aria-hidden /></span>
+              className="flex w-full items-center justify-between rounded-[22px] bg-white px-5 py-5 text-[1.12rem] font-black text-[#123f61] shadow-[0_12px_28px_rgba(0,0,0,.13)] transition hover:translate-x-2 hover:shadow-[0_18px_38px_rgba(0,0,0,.2)] md:px-8 md:py-6 md:text-[1.35rem]">
+              <span>{l.libelle}</span><span aria-hidden className="grid h-[42px] w-[42px] place-items-center rounded-full bg-or text-xl">→</span>
             </button>
           ))}
         </div>

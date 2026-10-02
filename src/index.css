@@ -1,9 +1,13 @@
 @tailwind base; @tailwind components; @tailwind utilities;
 body { @apply bg-papier text-encre font-sans antialiased; }
-:focus-visible { outline: 3px solid #E8A317; outline-offset: 2px; }
+:focus-visible { outline: 3px solid #086db0; outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
 @keyframes rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
 .rise { animation: rise .6s ease both; }
 @media (prefers-reduced-motion: reduce) { .rise { animation: none } * { transition: none !important } }
 @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
 .fade { animation: fade .3s ease both; }
 @media (prefers-reduced-motion: reduce) { .fade { animation: none } }
+
+.font-display { font-weight: 800; letter-spacing: -0.035em; }
+h1, h2, h3 { letter-spacing: -0.03em; }
+html { scroll-behavior: smooth; }

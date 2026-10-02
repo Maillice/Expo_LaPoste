@@ -41,7 +41,7 @@ export default function Search() {
       <div className="mt-6 grid gap-8 md:grid-cols-[200px_1fr]">
         <aside><fieldset className="rounded-lg border border-encre/10 bg-white p-4">
           <legend className="px-1 font-semibold">{t('filter.theme')}</legend>
-          {options.map((t) => <label key={t} className="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" checked={themes.includes(t)} onChange={() => toggle(t)} className="accent-[#E8A317]" />{t}</label>)}
+          {options.map((t) => <label key={t} className="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" checked={themes.includes(t)} onChange={() => toggle(t)} className="accent-[#175FA7]" />{t}</label>)}
           <button onClick={() => setThemes([])} className="mt-4 text-sm text-terre hover:underline">{t('filter.reset')}</button>
         </fieldset></aside>
         {error && <p role="alert" className="py-8 text-center text-terre">{t('common.error')}</p>}

@@ -5,11 +5,14 @@
  "type": "module",
  "scripts": {
   "dev": "vite",
+  "dev:share": "vite --host 0.0.0.0",
   "build": "tsc --noEmit && vite build",
   "preview": "vite preview",
   "predev": "node scripts/copy-draco.mjs",
   "prebuild": "node scripts/copy-draco.mjs",
-  "images": "node scripts/optimize-images.mjs"
+  "images": "node scripts/optimize-images.mjs",
+  "i18n:mo": "node scripts/import-mo.mjs",
+  "logo": "node scripts/make-logo.mjs"
  },
  "dependencies": {
   "lucide-react": "^0.453.0",

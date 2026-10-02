@@ -23,33 +23,34 @@ export default function Viewer3D() {
   if (!piece) return <main className="grid min-h-screen place-items-center bg-nuit text-white"><Link to="/catalogue" className="underline">{t('viewer.notfound')}</Link></main>
   const fallback = (
     <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
-      <PieceImage src={piece.image} alt={piece.titre} value={piece.valeur} priority className="w-56" />
-      <div aria-hidden className="-mt-2 h-5 w-72 rounded-full bg-white/10 blur-sm" />
-      <p role="status" className="rounded bg-white/10 px-4 py-2 text-center text-sm">{t('viewer.unavailable')}</p>
+      <PieceImage src={piece.image} alt={piece.titre} value={piece.valeur} priority className="w-48 md:w-56" />
+      <p role="status" className="rounded-lg bg-white/80 px-4 py-2 text-center text-sm text-encre">{t('viewer.unavailable')}</p>
     </div>
   )
-  const btn = 'flex items-center gap-2 rounded bg-white/10 px-3 py-2 text-sm hover:bg-white/20'
+  const btn = 'flex items-center gap-2 rounded-full bg-[#edf3f7] px-4 py-2 text-sm font-semibold hover:bg-[#dfe9f0]'
   return (
-    <main ref={box} className="flex min-h-screen flex-col bg-nuit text-white">
-      <div className="flex items-center justify-between p-4">
-        <Link to={`/catalogue/${piece.id}`} className={btn}><ArrowLeft size={16} aria-hidden />{t('viewer.back')}</Link>
-        <div className="flex gap-2">
-          {piece.modele3D && <button className={btn} onClick={() => setResetKey(resetKey + 1)}><RotateCcw size={16} aria-hidden />{t('viewer.reset')}</button>}
-          <button className={btn} onClick={() => box.current?.requestFullscreen?.()}><Maximize size={16} aria-hidden />{t('viewer.fs')}</button>
+    <main ref={box} className="flex min-h-screen items-center justify-center bg-[#05202f] p-4 md:p-6">
+      <div className="relative w-full max-w-[900px] rounded-3xl bg-white p-5 text-encre md:p-6">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <Link to={`/catalogue/${piece.id}`} className={btn}><ArrowLeft size={16} aria-hidden />{t('viewer.back')}</Link>
+          <div className="flex gap-2">
+            {piece.modele3D && <button className={btn} onClick={() => setResetKey(resetKey + 1)}><RotateCcw size={16} aria-hidden />{t('viewer.reset')}</button>}
+            <button className={btn} onClick={() => box.current?.requestFullscreen?.()}><Maximize size={16} aria-hidden />{t('viewer.fs')}</button>
+          </div>
         </div>
+        <p className="text-[.82rem] font-extrabold uppercase tracking-[.14em] text-[#0873b7]">{t('viewer.title')}</p>
+        <h1 className="mb-1 mt-2 text-2xl font-bold">{piece.titre}</h1>
+        <p className="mb-4 text-[#718394]">{piece.annee} · {piece.valeur} F · {piece.collectionNom ?? piece.collection}</p>
+        <div className="h-[390px] overflow-hidden rounded-[18px] bg-[radial-gradient(circle,#dff0f8,#9abbd0)] md:h-[500px]">
+          {piece.modele3D
+            ? <Boundary fallback={fallback}><Suspense fallback={<p className="p-10 text-center">{t('viewer.loading')}</p>}><ModelViewer key={resetKey} url={piece.modele3D} /></Suspense></Boundary>
+            : fallback}
+        </div>
+        <p className="mt-3 text-center text-[#63788a]">{t('viewer.tip')}</p>
+        <ul className="mt-3 flex justify-around text-xs text-[#63788a]" aria-label={t('viewer.controls')}>
+          {[[RotateCw, 'viewer.rotate'], [ZoomIn, 'viewer.zoom'], [Move, 'viewer.pan']].map(([Icon, l]) => { const I = Icon as typeof Move; return <li key={l as string} className="flex items-center gap-1.5"><I size={16} aria-hidden />{t(l as string)}</li> })}
+        </ul>
       </div>
-      <div className="min-h-[60vh] flex-1">
-        {piece.modele3D
-          ? <Boundary fallback={fallback}><Suspense fallback={<p className="p-10 text-center">{t('viewer.loading')}</p>}><ModelViewer key={resetKey} url={piece.modele3D} /></Suspense></Boundary>
-          : fallback}
-      </div>
-      <ul className="mx-auto flex w-full max-w-md justify-around px-4 pb-4 text-xs text-white/80" aria-label={t('viewer.controls')}>
-        {[[RotateCw, 'viewer.rotate'], [ZoomIn, 'viewer.zoom'], [Move, 'viewer.pan']].map(([Icon, l]) => { const I = Icon as typeof Move; return <li key={l as string} className="flex flex-col items-center gap-1"><I size={22} aria-hidden />{t(l as string)}</li> })}
-      </ul>
-      <footer className="mx-4 mb-4 flex items-center gap-4 rounded-lg bg-white/10 p-4 text-sm">
-        <PieceImage src={piece.miniature ?? piece.image} alt="" className="w-12 shrink-0" />
-        <div><p className="font-display text-lg">{piece.titre}</p><p className="text-white/70">{piece.annee} · {t('viewer.collection')} : {piece.collectionNom ?? piece.collection}</p></div>
-      </footer>
     </main>
   )
 }

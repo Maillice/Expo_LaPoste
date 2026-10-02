@@ -10,9 +10,9 @@ export const mockCollections: Collection[] = [
   c('communication-innovation', 'Communication et innovation', '1974 – 2025', 260, 'La poste et les technologies.'),
 ]
 export const mockLangues: Langue[] = [
-  { code: 'fr', nom: 'Français', drapeau: '🇫🇷', sousTitre: "Découvrir l'exposition en français" },
-  { code: 'mo', nom: 'Mooré', drapeau: '🇧🇫', sousTitre: "Découvrir l'exposition en mooré" },
-  { code: 'en', nom: 'English', drapeau: '🇬🇧', sousTitre: 'Discover the exhibition in English' },
+  { code: 'mo', libelle: 'En Mooré', nom: 'Mooré', drapeau: '🇧🇫', sousTitre: "Découvrir l'exposition en mooré" },
+  { code: 'fr', libelle: 'En Français', nom: 'Français', drapeau: '🇫🇷', sousTitre: "Découvrir l'exposition en français" },
+  { code: 'en', libelle: 'In English', nom: 'English', drapeau: '🇬🇧', sousTitre: 'Discover the exhibition in English' },
 ]
 export const mockMedias: Media[] = [
   { id: 'intro', type: 'video', titre: "Bienvenue dans l'histoire de La Poste", src: '/media/intro.mp4', dureeSec: 165 },
