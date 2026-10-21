@@ -1,0 +1,48 @@
+# Tout lancer : docker compose up --build
+#   site      -> http://localhost:8080
+#   API       -> http://localhost:4000
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: expo_poste
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d expo_poste"]
+      interval: 3s
+      retries: 20
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/expo_poste
+      PUBLIC_URL: http://localhost:4000      # adresse de l'API vue depuis le navigateur
+      CORS_ORIGIN: http://localhost:8080     # adresse du site
+      SHOW_UNVERIFIED: "true"
+    ports:
+      - "4000:4000"
+    volumes:
+      - media:/app/media
+
+  web:
+    build:
+      context: .
+      args:
+        VITE_API_URL: http://localhost:4000
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
+  media:

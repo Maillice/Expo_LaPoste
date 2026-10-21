@@ -2,7 +2,26 @@
 
 Node.js 22 + TypeScript (Fastify) + PostgreSQL. Répond au contrat `docs/API.md` du frontend.
 
-## Démarrage
+## Avec Docker (le plus simple)
+
+Depuis la racine du dépôt (là où se trouve `docker-compose.yml`) :
+
+```bash
+docker compose up --build        # base + API + site
+```
+
+- Site : http://localhost:8080 — API : http://localhost:4000
+- Les tables sont créées automatiquement au démarrage.
+- Données de démonstration : `docker compose exec api node dist/cli/seed.js`
+- Import du Drive (dossier téléchargé et dézippé sur votre PC) :
+  ```bash
+  docker compose run --rm -v "C:\chemin\dossier:/donnees:ro" api node dist/cli/import.js /donnees --dry-run
+  docker compose run --rm -v "C:\chemin\dossier:/donnees:ro" api node dist/cli/import.js /donnees
+  ```
+  Les images converties restent dans le volume `media`, qui survit aux redémarrages.
+- Arrêter : `docker compose down` (ajouter `-v` pour effacer aussi la base et les médias).
+
+## Démarrage sans Docker pour l'API
 
 ```bash
 npm install
