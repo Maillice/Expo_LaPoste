@@ -25,3 +25,9 @@ Les textes (titre, description, contexte, mots-clés, noms de collections) doive
 2. **Noms de champs** : si le backend diffère, adapter uniquement `toPiece` / `toCollection` dans `src/services/api.ts`.
 3. **CORS** ou proxy de développement.
 4. **Erreurs** : tout statut hors 2xx affiche un message d'erreur ; `404` sur `/:id` affiche « introuvable ».
+
+## Backend fourni
+
+Une implémentation de ce contrat (Node.js + PostgreSQL) se trouve dans `backend/` (voir `backend/README.md`).
+Pour l'utiliser : démarrer le backend (`cd backend && npm run dev`), puis dans ce dossier `npm run dev:api`
+(charge `.env.api`, donc `VITE_API_URL=http://localhost:4000`). `npm run dev` continue d'utiliser les données mockées.
