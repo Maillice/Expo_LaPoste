@@ -1,36 +1,32 @@
-import { useT } from '../../hooks/useLang'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react'
-import { mockMedias } from '../../data/mockCollections'
+import { Play } from 'lucide-react'
+import { useLang, useT } from '../../hooks/useLang'
 export default function Exhibition() {
-  const media = mockMedias[0]
   const t = useT()
-  const nav = useNavigate()
-  const box = useRef<HTMLDivElement>(null)
-  const video = useRef<HTMLVideoElement>(null)
-  const [playing, setPlaying] = useState(false)
-  const [muted, setMuted] = useState(false)
+  const { lang } = useLang()
   const [failed, setFailed] = useState(false)
-  const toggle = () => { const v = video.current; if (!v) return; v.paused ? v.play() : v.pause() }
-  const btn = 'rounded p-2 hover:bg-white/20'
+  const nav = useNavigate()
   return (
-    <main className="flex min-h-screen flex-col items-center bg-nuit px-5 py-12 text-white">
-      <h1 className="rise max-w-2xl text-center font-display text-3xl md:text-5xl">{t('expo.title')}</h1>
-      <p className="mt-3 text-white/70">{t('expo.subtitle')}</p>
-      <div ref={box} className="relative mt-10 aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-black">
-        <video ref={video} src={media.src} muted={muted} className="h-full w-full object-cover" aria-label={media.titre}
-          onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => nav('/catalogue')} onError={() => setFailed(true)} />
-        {failed && <p className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-white/70">{t('expo.unavailable')}</p>}
-        {!playing && <button onClick={toggle} aria-label={t('expo.play')} className="absolute inset-0 m-auto grid h-20 w-20 place-items-center rounded-full bg-white/90 text-nuit shadow-lg hover:scale-105 transition"><Play size={32} /></button>}
-        <div className="absolute inset-x-0 bottom-0 flex items-center gap-1 bg-gradient-to-t from-black/70 to-transparent p-3">
-          <button className={btn} onClick={toggle} aria-label={playing ? t('expo.pause') : t('expo.play')}>{playing ? <Pause /> : <Play />}</button>
-          <button className={btn} onClick={() => setMuted(!muted)} aria-label={muted ? t('expo.unmute') : t('expo.mute')}>{muted ? <VolumeX /> : <Volume2 />}</button>
-          <span className="ml-auto text-xs text-white/70">{Math.floor(media.dureeSec / 60)}:{String(media.dureeSec % 60).padStart(2, '0')}</span>
-          <button className={btn} onClick={() => box.current?.requestFullscreen?.()} aria-label={t('expo.fs')}><Maximize /></button>
-        </div>
+    <main className="mx-auto max-w-[1250px] px-[5vw] pb-20 pt-9">
+      <span className="inline-flex items-center gap-2 rounded-full bg-[#e8f3fa] px-3 py-2 font-extrabold text-[#1C63B7]">{lang.toUpperCase()} · {t('expo.badge')}</span>
+      <h1 className="rise mb-2.5 mt-4 text-[clamp(2.2rem,5vw,4.5rem)] font-bold leading-[1.05]">{t('expo.title')}</h1>
+      <p className="max-w-[900px] text-[clamp(1rem,1.7vw,1.3rem)] leading-relaxed text-[#567183]">{t('expo.subtitle')}</p>
+      <div className="mb-3 mt-6 overflow-hidden rounded-[26px] bg-[#1C63B7] shadow-[0_20px_55px_rgba(7,65,104,.2)]">
+        {!failed
+          ? <video key={lang} controls playsInline preload="metadata" src={`/media/video-${lang}.mp4`} onEnded={() => nav('/catalogue')} onError={() => setFailed(true)} aria-label={t('expo.videoTitle')} className="block max-h-[650px] w-full bg-[#000000]" />
+          : (
+            <div className="relative grid aspect-[16/8.5] min-h-[260px] place-items-center bg-[radial-gradient(circle_at_50%_40%,#0C8DD7,#1C63B7_70%)] p-6 text-center text-white">
+              <div>
+                <span aria-hidden className="mx-auto grid h-[82px] w-[82px] place-items-center rounded-full bg-or text-[#14384e] shadow-[0_12px_35px_rgba(0,0,0,.3)]"><Play size={32} /></span>
+                <h2 className="mb-2 mt-5 text-2xl font-bold">{t('expo.videoTitle')}</h2>
+                <p>{t('expo.videoNote')}</p>
+              </div>
+              <p className="absolute inset-x-5 bottom-5 text-sm text-white/70">media/video-{lang}.mp4</p>
+            </div>
+          )}
       </div>
-      <Link to="/catalogue" className="mt-8 rounded border border-white/40 px-5 py-2 text-sm hover:bg-white/10">{t('expo.skip')}</Link>
+      <Link to="/catalogue" className="inline-block rounded-xl border border-bleu px-5 py-3 text-sm font-semibold text-bleu hover:bg-bleu hover:text-white">{t('expo.skip')}</Link>
     </main>
   )
 }
