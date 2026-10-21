@@ -32,24 +32,22 @@ export default function Viewer3D() {
   return (
     <main ref={box} className="flex min-h-screen flex-col bg-nuit text-white">
       <div className="flex items-center justify-between p-4">
-        <Link to={`/catalogue/${piece.id}`} className={btn}><ArrowLeft size={16} aria-hidden />{t('viewer.back')}</Link>
+        <Link to="/catalogue" className={btn}><ArrowLeft size={16} aria-hidden />{t('viewer.back')}</Link>
         <div className="flex gap-2">
           {piece.modele3D && <button className={btn} onClick={() => setResetKey(resetKey + 1)}><RotateCcw size={16} aria-hidden />{t('viewer.reset')}</button>}
           <button className={btn} onClick={() => box.current?.requestFullscreen?.()}><Maximize size={16} aria-hidden />{t('viewer.fs')}</button>
         </div>
       </div>
-      <div className="min-h-[60vh] flex-1">
+      <div className="relative min-h-[60vh] flex-1">
+        <div className="absolute inset-0">
         {piece.modele3D
           ? <Boundary fallback={fallback}><Suspense fallback={<p className="p-10 text-center">{t('viewer.loading')}</p>}><ModelViewer key={resetKey} url={piece.modele3D} /></Suspense></Boundary>
           : fallback}
+        </div>
       </div>
       <ul className="mx-auto flex w-full max-w-md justify-around px-4 pb-4 text-xs text-white/80" aria-label={t('viewer.controls')}>
         {[[RotateCw, 'viewer.rotate'], [ZoomIn, 'viewer.zoom'], [Move, 'viewer.pan']].map(([Icon, l]) => { const I = Icon as typeof Move; return <li key={l as string} className="flex flex-col items-center gap-1"><I size={22} aria-hidden />{t(l as string)}</li> })}
       </ul>
-      <footer className="mx-4 mb-4 flex items-center gap-4 rounded-lg bg-white/10 p-4 text-sm">
-        <PieceImage src={piece.miniature ?? piece.image} alt="" className="w-12 shrink-0" />
-        <div><p className="font-display text-lg">{piece.titre}</p><p className="text-white/70">{piece.annee} · {t('viewer.collection')} : {piece.collectionNom ?? piece.collection}</p></div>
-      </footer>
     </main>
   )
 }

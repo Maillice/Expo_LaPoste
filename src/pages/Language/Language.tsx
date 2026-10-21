@@ -8,7 +8,7 @@ export default function Language() {
   const { setLang } = useLang()
   const t = useT()
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[radial-gradient(ellipse_at_50%_0%,#2c3f66,#0F1B33_70%)] px-5 py-8 text-white">
+    <main className="flex min-h-screen flex-col items-center bg-[linear-gradient(110deg,#1C63B7,#0C8DD7)] px-5 py-8 text-white">
       <Logo />
       <div className="flex flex-1 flex-col items-center justify-center">
         <h1 className="rise text-center font-display text-4xl md:text-5xl">{t('lang.title')}</h1>

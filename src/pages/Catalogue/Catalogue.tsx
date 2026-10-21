@@ -41,13 +41,15 @@ export default function Catalogue() {
   return (
     <main>
       <header className="px-5 pb-4 pt-10">
-        <div className="mx-auto max-w-7xl">
-          <h1 className="font-display text-4xl">{t('cat.title')}</h1>
-          <p className="mt-2 text-encre/70">{t('cat.subtitle')}</p>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="font-display text-4xl">{t('cat.title')}</h1>
+            <p className="mt-2 text-encre/70">{t('cat.subtitle')}</p>
+          </div>
+          <SearchBar value={q} onChange={changeQ} className="w-full sm:w-60" />
         </div>
       </header>
       <div className="mx-auto max-w-7xl space-y-4 px-5 py-8">
-        <SearchBar value={q} onChange={changeQ} />
         <Filters value={filters} onChange={changeFilters} themes={themes} collections={collections} />
         <div className="flex items-center justify-between">
           <p aria-live="polite" className="text-sm text-encre/70">{t(total > 1 ? 'cat.many' : 'cat.one', { n: total })}</p>

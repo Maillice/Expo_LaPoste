@@ -31,11 +31,6 @@ export default function Exhibition() {
         </div>
       </div>
       <Link to="/catalogue" className="mt-8 rounded border border-white/40 px-5 py-2 text-sm hover:bg-white/10">{t('expo.skip')}</Link>
-      <section className="mt-14 text-center">
-        <h2 className="font-display text-2xl">{t('expo.explore')}</h2>
-        <p className="mt-1 text-sm text-white/70">{t('expo.exploreSub')}</p>
-        <Link to="/catalogue" className="mt-5 inline-block rounded bg-or px-6 py-3 font-semibold text-nuit hover:brightness-110">{t('expo.enter')}</Link>
-      </section>
     </main>
   )
 }

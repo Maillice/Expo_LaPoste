@@ -1,17 +1,18 @@
 import { useT } from '../../hooks/useLang'
 import { Link } from 'react-router-dom'
 import StampArt from '../PieceCard/StampArt'
+import Logo from '../Navbar/Logo'
 export default function Hero() {
   const t = useT()
   return (
-    <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_75%_20%,#2c3f66,#0F1B33_65%)] pb-24 pt-28 text-white">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 md:grid-cols-2">
+    <section className="relative flex min-h-screen flex-col overflow-hidden bg-[linear-gradient(110deg,#1C63B7,#0C8DD7)] px-0 py-8 text-white">
+      <div className="mx-auto w-full max-w-7xl px-5"><Logo className="h-24" /></div>
+      <div className="mx-auto grid w-full max-w-7xl flex-1 items-center gap-12 px-5 py-12 md:grid-cols-2">
         <div className="rise">
           <h1 className="font-display text-4xl leading-tight md:text-6xl">{t('hero.title')}</h1>
           <p className="mt-6 max-w-md text-lg text-white/80">{t('hero.subtitle')}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/langue" className="rounded bg-or px-6 py-3 font-semibold text-nuit hover:brightness-110">{t('nav.visit')}</Link>
-            <Link to="/collections" className="rounded border border-white/40 px-6 py-3 hover:bg-white/10">{t('hero.cta2')}</Link>
           </div>
         </div>
         <div aria-hidden className="relative mx-auto h-80 w-full max-w-md">
