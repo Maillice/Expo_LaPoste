@@ -3,3 +3,7 @@ dist
 public/draco
 assets-src
 .env
+
+# Données sources (images, vidéos…) : trop lourdes pour Git, importées via le backend
+Données/
+Donnees/
