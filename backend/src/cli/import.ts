@@ -1,15 +1,21 @@
 import path from 'node:path'
 import { config } from '../config.js'
 import { createPool } from '../db.js'
-import { importFolder } from '../importer/import.js'
+import { importFolder, writeCsvTemplate } from '../importer/import.js'
 import { migrate } from './migrate.js'
 
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
 const dir = args.find((a) => !a.startsWith('--'))
 if (!dir) {
-  console.error('Usage : npm run import -- <dossier-drive-telecharge> [--dry-run]')
+  console.error('Usage : npm run import -- <dossier> [--dry-run | --modele-csv]')
   process.exit(1)
+}
+if (args.includes('--modele-csv')) {
+  const r = writeCsvTemplate(path.resolve(dir))
+  console.log(`Modèle écrit : ${r.fichier}\n${r.lignes} images listées (doublons exacts exclus), dont ${r.generiques} aux noms génériques (titre à remplir).`)
+  console.log('Ouvrez-le dans Excel, complétez titre / année / valeur / collection, enregistrez en CSV UTF-8 sous le nom metadonnees.csv, puis lancez l\'import.')
+  process.exit(0)
 }
 const db = createPool()
 await migrate(db)

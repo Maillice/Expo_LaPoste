@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { parse } from 'csv-parse/sync'
 import sharp from 'sharp'
@@ -11,6 +11,10 @@ import { AUDIO_EXT, IMAGE_EXT, MODEL_EXT, VIDEO_EXT, inferFromPath, inferLang, m
 export interface ImportOptions { sourceDir: string; mediaDir: string; dryRun?: boolean; log?: (m: string) => void }
 export interface ImportReport { images: number; nouvelles: number; doublons: number; videos: number; audios: number; modeles: number; erreurs: string[] }
 
+const pathKey = (f: string) => {
+  const p = f.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase()
+  return p.includes('/') ? `path:${normalize(p)}` : matchKey(p)
+}
 const slug = (s: string) => normalize(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -29,7 +33,8 @@ function readOverrides(sourceDir: string): Map<string, Record<string, string>> {
   const map = new Map<string, Record<string, string>>()
   if (!file) return map
   const rows = parse(readFileSync(file), { columns: true, skip_empty_lines: true, bom: true, trim: true, delimiter: [',', ';'] }) as Record<string, string>[]
-  for (const r of rows) if (r.fichier) map.set(matchKey(r.fichier), r)
+  // « fichier » peut être un chemin relatif (recommandé : distingue deux images de même nom) ou un simple nom
+  for (const r of rows) if (r.fichier) map.set(pathKey(r.fichier), r)
   return map
 }
 
@@ -84,7 +89,7 @@ export async function importFolder(db: Db, opts: ImportOptions): Promise<ImportR
 
       const key = matchKey(f)
       const inf = inferFromPath(rel(f))
-      const o = overrides.get(key) ?? {}
+      const o = overrides.get(pathKey(rel(f))) ?? overrides.get(key) ?? {}
       const annee = Number(o.annee) || inf.annee
       const titre = o.titre || inf.titre
       const collectionId = o.collection ? slug(o.collection) : inf.collection
@@ -126,4 +131,32 @@ export async function importFolder(db: Db, opts: ImportOptions): Promise<ImportR
     }
   }
   return rep
+}
+
+const COLONNES = ['fichier', 'titre', 'annee', 'valeur', 'theme', 'collection', 'description', 'contexte']
+const GENERIQUE = /^(img|image|dsc|scan|photo|p)[-_ ]?\d+$/i
+const cell = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`
+
+/** Écrit un fichier modèle (une ligne par image, doublons exacts exclus) à compléter dans Excel. */
+export function writeCsvTemplate(sourceDir: string): { fichier: string; lignes: number; generiques: number } {
+  const lignes: string[] = [COLONNES.join(';')]
+  const vus = new Set<string>()
+  let generiques = 0
+  for (const f of walk(sourceDir).filter((f) => IMAGE_EXT.has(path.extname(f).toLowerCase()))) {
+    const hash = createHash('sha1').update(readFileSync(f)).digest('hex')
+    if (vus.has(hash)) continue
+    vus.add(hash)
+    const rel = path.relative(sourceDir, f).split(path.sep).join('/')
+    const stem = path.basename(rel, path.extname(rel))
+    const inf = inferFromPath(rel)
+    const generique = GENERIQUE.test(stem.trim())
+    if (generique) generiques++
+    const theme = inf.theme.charAt(0).toUpperCase() + inf.theme.slice(1)
+    // titre laissé vide pour les noms génériques : c'est à vous de le remplir
+    lignes.push([rel, generique ? '' : inf.titre, inf.annee || '', '', theme, inf.collection ?? '', '', ''].map(cell).join(';'))
+  }
+  const existe = existsSync(path.join(sourceDir, 'metadonnees.csv'))
+  const fichier = path.join(sourceDir, existe ? 'metadonnees.modele.csv' : 'metadonnees.csv')
+  writeFileSync(fichier, '\ufeff' + lignes.join('\r\n') + '\r\n', 'utf8')
+  return { fichier, lignes: lignes.length - 1, generiques }
 }

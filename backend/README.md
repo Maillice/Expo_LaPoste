@@ -50,6 +50,8 @@ L'import est relançable : les doublons sont détectés (empreinte SHA-1 du fich
 | `.glb` | modèle 3D de la pièce de même nom |
 | `metadonnees.csv` | corrige/complète : colonnes `fichier;titre;annee;valeur;theme;collection;description;contexte` |
 
+**Préparer le fichier de métadonnées automatiquement** : `npm run import -- <dossier> --modele-csv` écrit `metadonnees.csv` (ou `metadonnees.modele.csv` s'il existe déjà) dans le dossier, avec une ligne par image (doublons exacts exclus). Complétez-le dans Excel : la colonne `fichier` contient le chemin relatif, ce qui distingue deux images de même nom. Les noms génériques (`image00018.jpeg`) ont un titre vide à remplir. Avec Docker, montez le dossier sans `:ro` pour que le fichier puisse être écrit.
+
 Une pièce dont le titre ou l'année a été **déduit** est marquée `a_verifier`. Avec `SHOW_UNVERIFIED=false`, elles sont cachées du public tant qu'elles ne sont pas confirmées (renseignez-les dans le CSV, puis relancez).
 
 ## Points d'accès
